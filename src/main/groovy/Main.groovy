@@ -7,7 +7,7 @@ import org.jsoup.Jsoup
 
 static void main(String[] args) {
     final def domain = "https://wallpapershome.com"
-    final def baseURL = "${domain}/nature/?page="
+    final def baseURL = "${domain}/?page="
     final def END_PAGE = 100
     final def distinction = "downloads_${RandomStringUtils.random(10, true, true)}"
 
@@ -34,9 +34,6 @@ static void main(String[] args) {
             def imageURL = domain +
                     innerPageObj.selectFirst(".block-download__resolutions--6 a").attr("href")
 //            println imageURL
-            if (!new File(target).exists()) {
-                new File(target).mkdir()
-            }
             def file = new File("${target}/${cnt++}_${imageURL.split("/").last()}")
             try {
                 println "[Download] Start download ${imageURL}"
