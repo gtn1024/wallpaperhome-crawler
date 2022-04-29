@@ -15,7 +15,7 @@ static void main(String[] args) {
     final def target = "${System.getProperty("user.home")}/${distinction}"
 
     def cnt = 0
-    for (i in 1..<END_PAGE + 1) {
+    for (i in 1..END_PAGE) {
         def url = "${baseURL}${i}"
         println "[Page] ${url}"
         def elements = Jsoup.connect(url).get()
@@ -43,7 +43,9 @@ static void main(String[] args) {
                 FileUtils.copyURLToFile(new URL(imageURL), file, 10000, 10000)
                 println "[Download] ${imageURL} downloaded to ${file.absolutePath}"
             } catch (Exception e) {
-                println "${imageURL} download error"
+                file.delete()
+                cnt--
+                println "[Download] ${imageURL} download failed"
                 println e
             }
         }
