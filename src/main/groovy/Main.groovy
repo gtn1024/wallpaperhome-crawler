@@ -8,7 +8,7 @@ import org.jsoup.Jsoup
 static void main(String[] args) {
     final def domain = "https://wallpapershome.com"
     final def baseURL = "${domain}/nature/?page="
-    final def END_PAGE = 10
+    final def END_PAGE = 100
     final def distinction = "downloads_${RandomStringUtils.random(10, true, true)}"
 
     final def httpClient = HttpClients.createDefault()
@@ -17,7 +17,7 @@ static void main(String[] args) {
     def cnt = 0
     for (i in 1..<END_PAGE + 1) {
         def url = "${baseURL}${i}"
-        println url
+        println "[Page] ${url}"
         def elements = Jsoup.connect(url).get()
                 .select("div#pics-list a")
         elements.each { element ->
@@ -33,14 +33,15 @@ static void main(String[] args) {
             def innerPageObj = Jsoup.parse(result)
             def imageURL = domain +
                     innerPageObj.selectFirst(".block-download__resolutions--6 a").attr("href")
-            println imageURL
+//            println imageURL
             if (!new File(target).exists()) {
                 new File(target).mkdir()
             }
             def file = new File("${target}/${cnt++}_${imageURL.split("/").last()}")
             try {
-                println "Downloading ${imageURL} to ${file.absolutePath}"
+                println "[Download] Start download ${imageURL}"
                 FileUtils.copyURLToFile(new URL(imageURL), file, 10000, 10000)
+                println "[Download] ${imageURL} downloaded to ${file.absolutePath}"
             } catch (Exception e) {
                 println "${imageURL} download error"
                 println e
